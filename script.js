@@ -3,7 +3,6 @@ let displayTotal = "0";
 let currentEntry = 0;
 let pastEntry  = 0;
 let operator = "";
-let isFirstDot = true;
 
 const clearBtn = document.getElementById("clear");
 const plusMinusBtn = document.getElementById("plusMinus");
@@ -31,7 +30,10 @@ clearBtn.addEventListener("click", () => {
 });
 
 plusMinusBtn.addEventListener("click", () => {
-    location.reload();
+    displayTotal = document.getElementById("totalDisplay").innerText;
+    displayTotal.includes("-") ? displayTotal = displayTotal.replace("-", "") 
+            : displayTotal = "-" + displayTotal;      
+    updateDisplay();
 });
 
 percentBtn.addEventListener("click", () => {
@@ -39,7 +41,14 @@ percentBtn.addEventListener("click", () => {
 });
 
 divideBtn.addEventListener("click", () => {
-    location.reload();
+    if (operator !== "") {
+        converToCurrentEntry();
+        operate();
+        operator = "/";
+    } else {
+        operator = "/";
+        convertToPastEntry();
+    }
 });
 
 sevenBtn.addEventListener("click", () => {
@@ -58,7 +67,14 @@ nineBtn.addEventListener("click", () => {
 });
 
 multiplyBtn.addEventListener("click", () => {
-    location.reload();
+    if (operator !== "") {
+        converToCurrentEntry();
+        operate();
+        operator = "*";
+    } else {
+        operator = "*";
+        convertToPastEntry();
+    }
 });
 
 fourBtn.addEventListener("click", () => {
@@ -77,7 +93,14 @@ sixBtn.addEventListener("click", () => {
 });
 
 subtractBtn.addEventListener("click", () => {
-    location.reload();
+    if (operator !== "") {
+        converToCurrentEntry();
+        operate();
+        operator = "-";
+    } else {
+        operator = "-";
+        convertToPastEntry();
+    }
 });
 
 oneBtn.addEventListener("click", () => {
@@ -96,8 +119,14 @@ threeBtn.addEventListener("click", () => {
 });
 
 addBtn.addEventListener("click", () => {
-    displayTotal = Number(displayTotal) + 5;
-    updateDisplay();
+    if (operator !== "") {
+        converToCurrentEntry();
+        operate();
+        operator = "+";
+    } else {
+        operator = "+";
+        convertToPastEntry();
+    }
 });
 
 zeroBtn.addEventListener("click", () => {
@@ -121,6 +150,47 @@ equalBtn.addEventListener("click", () => {
 // Functions
 function updateDisplay() {
     document.getElementById("totalDisplay").innerText = displayTotal;
+}
+
+function displayFinalResult() {
+    displayTotal = pastEntry.toString();
+    updateDisplay();
+
+}
+
+function isAnotherOperation() {
+    return (!operator === "");
+}
+
+function convertToPastEntry() {
+    pastEntry = Number(displayTotal);
+    displayTotal = "0";
+}
+
+function converToCurrentEntry() {
+    currentEntry = Number(displayTotal);
+    displayTotal = "0";
+}
+
+function operate() {
+    switch (operator) {
+        case "+":
+            addition();
+            break;
+
+        case "-":
+            subtract();
+            break;
+        
+        case "*":
+            multiply();
+            break;
+            
+        case "/":
+            division();
+            break;    
+    }
+    displayFinalResult();
 }
 
 function division() {
